@@ -13,4 +13,19 @@ class CustomCanvas:
         canvas = Canvas(root, height=height, width=width, bg='white')
         canvas.pack()
         root.mainloop()
+
+class Rectangle:
+    height = 0
+    wdith = 0
+    x = 0
+    y = 0
+    def __init__(self, height, width, x, y):
+        self.height = height
+        self.width = width
+        self.x = x
+        self.y = y
+
+
+def main:
+    
 canvas = CustomCanvas(200, 200)
