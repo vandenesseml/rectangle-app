@@ -1,9 +1,7 @@
 from sys import argv
-from tkinter import *
+from tkinter import Canvas, Tk
 
 from rectpack import newPacker
-
-import rpack
 
 
 class Rectangle:
@@ -31,38 +29,25 @@ class CustomCanvas:
         y1 = rectangle.y
         x2 = x1 + rectangle.width
         y2 = y1 + rectangle.height
-        self.canvas.create_rectangle(x1, y1, x2, y2)
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='blue')
 
     def displayCanvas(self):
         self.canvas.pack()
         self.root.mainloop()
 
-
 def pack(allRect, canvasSize):
     rectangleList = []
     for rect in allRect:
         rectangleList.append((rect.height, rect.width))
-
-    # positions = rpack.pack(rectangleList)
-    # for index in range(0, len(allRect)):
-    #     rect = allRect[index]
-    #     pos = positions[index]
-    #     rect.x = pos[0]
-    #     rect.y = pos[1]
-
     packer = newPacker()
 
-    # Add the rectangles to packing queue
-    for r in rectangleList:
-        packer.add_rect(*r)
-
-    # Add the bins where the rectangles will be placed
+    for rectangle in rectangleList:
+        packer.add_rect(*rectangle)
 
     packer.add_bin(*canvasSize)
 
-    # Start packing
     packer.pack()
-    # create rectangle List
+
     rectangleList=[]
     for rectangle in packer.rect_list():
         rect = Rectangle(rectangle[4], rectangle[3], rectangle[1],
@@ -70,9 +55,8 @@ def pack(allRect, canvasSize):
         rectangleList.append(rect)
     return rectangleList
 
-
 def main():
-    with open('95PrecentFill.txt', 'r', encoding='utf-8') as input:
+    with open('25PrecentFill.txt', 'r', encoding='utf-8') as input:
         fileContents = input.read().split('\n')
     height = int(fileContents[0].split(',')[0])
     width = int(fileContents[0].split(',')[1])
@@ -88,7 +72,6 @@ def main():
 
     for rectangle in placedRectangleList:
         canvas.addRectangle(rectangle)
-    # canvas.addRectangle(placedRectangleList[3])
 
     canvas.displayCanvas()
 
