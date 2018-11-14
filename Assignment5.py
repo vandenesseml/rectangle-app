@@ -29,11 +29,12 @@ class CustomCanvas:
         y1 = rectangle.y
         x2 = x1 + rectangle.width
         y2 = y1 + rectangle.height
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill='blue')
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill='yellow')
 
     def displayCanvas(self):
         self.canvas.pack()
         self.root.mainloop()
+
 
 def pack(allRect, canvasSize):
     rectangleList = []
@@ -48,29 +49,29 @@ def pack(allRect, canvasSize):
 
     packer.pack()
 
-    rectangleList=[]
+    rectangleList = []
     for rectangle in packer.rect_list():
         rect = Rectangle(rectangle[4], rectangle[3], rectangle[1],
                          rectangle[2])
         rectangleList.append(rect)
     return rectangleList
 
+
 def main():
-    with open('25PrecentFill.txt', 'r', encoding='utf-8') as input:
+    with open(argv[1], 'r', encoding='utf-8') as input:
         fileContents = input.read().split('\n')
     height = int(fileContents[0].split(',')[0])
     width = int(fileContents[0].split(',')[1])
     canvasSize = (height, width)
-    canvas = CustomCanvas(height, width)
-    rectangleList = []
+    canvas = CustomCanvas((height + 3), (width + 3))
+    allRect = []
     for index in range(1, len(fileContents)):
         rectangleSize = fileContents[index].split(',')
-        rectangle = Rectangle(
-            int(rectangleSize[0]), int(rectangleSize[1]), 0, 0)
-        rectangleList.append(rectangle)
-    placedRectangleList = pack(rectangleList, canvasSize)
+        rectangle = Rectangle(int(rectangleSize[0]), int(rectangleSize[1]))
+        allRect.append(rectangle)
+    packedRectangles = pack(allRect, canvasSize)
 
-    for rectangle in placedRectangleList:
+    for rectangle in packedRectangles:
         canvas.addRectangle(rectangle)
 
     canvas.displayCanvas()
