@@ -1,33 +1,30 @@
 from sys import argv
 from tkinter import *
 
+from rectpack import newPacker
+
+import rpack
+
 
 class Rectangle:
-    height = 0
-    width = 0
-    x = 0
-    y = 0
-
-    def __init__(self, height, width, x, y):
+    def __init__(self, height, width, x=0, y=0):
         self.height = height
         self.width = width
         self.x = x
         self.y = y
 
+    def setOrigin(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class CustomCanvas:
-    height = 0
-    width = 0
-    canvas = None
-    root = None
-
     def __init__(self, height, width):
         self.height = height
         self.width = width
         self.root = Tk()
         self.root.geometry(str(height) + 'x' + str(width))
         self.canvas = Canvas(self.root, height=height, width=width, bg='white')
-        self.canvas.create_rectangle(25, 25, 50, 50)
 
     def addRectangle(self, rectangle):
         x1 = rectangle.x
@@ -43,12 +40,34 @@ class CustomCanvas:
 
 def pack(allRect, canvasSize):
     rectangleList = []
+    for rect in allRect:
+        rectangleList.append((rect.height, rect.width))
 
+    positions = rpack.pack(rectangleList)
+    for index in range(0, len(allRect)):
+        rect = allRect[index]
+        pos = positions[index]
+        rect.x = pos[0]
+        rect.y = pos[1]
+
+    # packer = newPacker()
+
+    # # Add the rectangles to packing queue
+    # for r in rectangleList:
+    #     packer.add_rect(r)
+
+    # # Add the bins where the rectangles will be placed
+
+    # packer.add_bin(canvasSize)
+
+    # # Start packing
+    # packer.pack()
+    # print(nrect=len(packer[0]))
     return allRect
 
 
 def main():
-    with open('25PrecentFill.txt', 'r', encoding='utf-8') as input:
+    with open(argv[1], 'r', encoding='utf-8') as input:
         fileContents = input.read().split('\n')
     height = int(fileContents[0].split(',')[0])
     width = int(fileContents[0].split(',')[1])
@@ -64,8 +83,10 @@ def main():
 
     for rectangle in placedRectangleList:
         canvas.addRectangle(rectangle)
+    # canvas.addRectangle(placedRectangleList[3])
 
     canvas.displayCanvas()
 
 
-main()
+if __name__ == '__main__':
+    main()
